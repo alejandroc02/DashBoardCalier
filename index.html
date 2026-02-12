@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calier Argentina — Panel de Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: '#F8FAFC',     /* Light grey-blue background */
+              bg2: '#FFFFFF',    /* Pure white surfaces */
+              card: '#FFFFFF',   /* White cards */
+              cardH: '#F1F5F9',  /* Soft hover grey */
+              brd: '#E2E8F0',    /* Delicate border */
+              brd2: '#CBD5E1',   /* Visible border on hover */
+              t1: '#0F172A',     /* Dark slate text (headings) */
+              t2: '#475569',     /* Slate grey (primary text) */
+              t3: '#94A3B8',     /* Light slate (muted text) */
+              teal: '#0D9488',   /* Clean teal */
+              'teal-d': 'rgba(13,148,136,0.1)',
+              blue: '#2563EB',   /* Modern blue */
+              'blue-d': 'rgba(37,99,235,0.1)',
+              amber: '#D97706',  /* Deep amber */
+              'amber-d': 'rgba(217,119,6,0.1)',
+              rose: '#E11D48',   /* Vivid rose */
+              'rose-d': 'rgba(225,29,72,0.1)',
+              violet: '#7C3AED', /* Rich violet */
+              'violet-d': 'rgba(124,58,237,0.1)',
+            },
+            fontFamily: {
+              sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+              mono: ['JetBrains Mono', 'Courier New', 'monospace'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #F8FAFC;
+        color: #0F172A;
+      }
+      /* Custom Scrollbar for Light Mode */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94A3B8;
+      }
+      .recharts-cartesian-grid-horizontal line,
+      .recharts-cartesian-grid-vertical line {
+        stroke: #1E2530;
+      }
+      /* Map Styles */
+      .rsm-geography {
+        outline: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "recharts": "https://esm.sh/recharts@^3.7.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.95.3",
+    "react-simple-maps": "https://esm.sh/react-simple-maps@3.0.0?external=react,react-dom",
+    "d3-scale": "https://esm.sh/d3-scale@4.0.2",
+    "d3-geo": "https://esm.sh/d3-geo@3.1.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
