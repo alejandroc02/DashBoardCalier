@@ -12,7 +12,7 @@ La aplicación está construida con tecnologías modernas para garantizar rapide
 - **Bundler**: [Vite](https://vitejs.dev/) para un entorno de desarrollo ultrarrápido.
 - **Backend/Base de Datos**: [Supabase](https://supabase.com/) (PostgreSQL + Auth + API en tiempo real).
 - **Estilos**: [Tailwind CSS](https://tailwindcss.com/) para un diseño responsivo y moderno.
-- **Visualización de Datos**: [Recharts](https://recharts.org/) para gráficos y `react-simple-maps` para el mapa interactivo de Argentina.
+- **Visualización de Datos**: [Recharts](https://recharts.org/) para gráficos.
 - **Iconografía**: [Lucide React](https://lucide.dev/).
 
 ---
@@ -28,7 +28,6 @@ App/
 │   │   └── supabase.ts     # Configuración y cliente de conexión con Supabase.
 │   ├── components/
 │   │   ├── Login.tsx       # Módulo de autenticación simple.
-│   │   ├── ArgentinaMap.tsx# Mapa interactivo de Argentina por provincias.
 │   │   └── Components.tsx  # Componentes reutilizables (KPI Cards, Badges, Chart Cards).
 │   └── index.tsx           # Punto de entrada de la aplicación.
 └── package.json            # Dependencias y scripts del proyecto.
@@ -93,7 +92,7 @@ La aplicación cuenta con un motor de filtrado global que afecta a todas las pes
 1. **Rango de Fechas**: Filtra interacciones por `fecha_envio`.
 2. **Clasificación**: Permite aislar leads de Compra, Información o Bajas.
 3. **Vendedor**: Filtra toda la data para ver el desempeño de una persona específica.
-4. **Provincia**: Filtra clientes e interacciones por ubicación geográfica (vía mapa o tabla).
+4. **Provincia**: Filtra clientes e interacciones por ubicación geográfica.
 
 ---
 
@@ -102,8 +101,7 @@ La aplicación cuenta con un motor de filtrado global que afecta a todas las pes
 1. **Dashboard de Resumen**: Vista de alto nivel con gráficos de tendencia diaria y distribución de leads.
 2. **Monitor de Interacciones**: Tabla detallada con búsqueda en tiempo real y tooltips de resumen.
 3. **Gestión de Vendedores**: Ranking de efectividad y alertas de derivaciones pendientes/atrasadas.
-4. **Mapa de Calor**: Visualización geográfica de clientes e interacciones por provincia.
-5. **Directorio de Clientes**: Listado completo con segmentación por sector y conteo de actividad.
+4. **Directorio de Clientes**: Listado completo con segmentación por sector y conteo de actividad.
 
 ---
 

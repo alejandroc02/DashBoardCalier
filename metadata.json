@@ -1,5 +1,5 @@
 {
   "name": "Calier Argentina Dashboard",
-  "description": "A professional dark-themed dashboard for WhatsApp bot interactions, featuring Supabase integration, real-time filtering, data visualization with Recharts, and an interactive map of Argentina.",
+  "description": "A professional dark-themed dashboard for WhatsApp bot interactions, featuring Supabase integration, real-time filtering, and data visualization with Recharts.",
   "requestFramePermissions": []
 }

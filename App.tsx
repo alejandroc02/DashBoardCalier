@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { supabase } from './services/supabase';
 import Login from './components/Login';
-import ArgentinaMap from './components/ArgentinaMap';
 import { KPICard, Badge, ChartCard } from './components/Components';
 import Aurora from './components/react-bits/Aurora';
 import { LogOut, RotateCcw, Search, AlertTriangle, Clock, RefreshCw } from 'lucide-react';
-import { Interaccion, Seguimiento, Cliente, Vendedor, Filters, PROVINCIAS_COORDS } from './types';
+import { Interaccion, Seguimiento, Cliente, Vendedor, Filters } from './types';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   PieChart, Pie, Cell, BarChart, Bar, Legend
@@ -22,7 +21,7 @@ function App() {
   const [vendedores, setVendedores] = useState<Vendedor[]>([]);
 
   // UI State
-  const [activeTab, setActiveTab] = useState<'resumen' | 'interacciones' | 'clientes' | 'vendedores' | 'mapa'>('resumen');
+  const [activeTab, setActiveTab] = useState<'resumen' | 'interacciones' | 'clientes' | 'vendedores'>('resumen');
   const [filters, setFilters] = useState<Filters>({
     dateFrom: new Date(new Date().setDate(new Date().getDate() - 90)).toISOString().split('T')[0],
     dateTo: new Date().toISOString().split('T')[0],
@@ -33,7 +32,6 @@ function App() {
     provincia: ''
   });
   const [searchTerm, setSearchTerm] = useState('');
-  const [mapMetric, setMapMetric] = useState<'clientes' | 'interacciones' | 'compras'>('interacciones');
   const [hoveredSummary, setHoveredSummary] = useState<{ text: string; x: number; y: number } | null>(null);
 
   // Load Data
@@ -309,33 +307,6 @@ function App() {
     };
   }, [vendedores, filteredData, filters.vendedor, interacciones, clientes]);
 
-  // Map Data
-  const mapData = useMemo(() => {
-    const provData: Record<string, { clientes: number; interacciones: number; compras: number }> = {};
-    
-    // Initialize
-    Object.keys(PROVINCIAS_COORDS).forEach(p => provData[p] = { clientes: 0, interacciones: 0, compras: 0 });
-
-    // Fill Client Counts
-    clientes.forEach(c => {
-      if (provData[c.provincia]) provData[c.provincia].clientes++;
-    });
-
-    // Fill Interactions & Purchases
-    const clientProvMap = new Map<string, string>();
-    clientes.forEach(c => clientProvMap.set(c.codigo, c.provincia));
-
-    interacciones.forEach(i => {
-      const prov = clientProvMap.get(i.client_codigo);
-      if (prov && provData[prov]) {
-        provData[prov].interacciones++;
-        if (getClas(i) === 'COMPRA') provData[prov].compras++;
-      }
-    });
-
-    return provData;
-  }, [clientes, interacciones]);
-
   const SECTOR_COLORS = ['#2DD4A8','#3B82F6','#F59E0B','#F43F5E','#8B5CF6','#EC4899','#06B6D4'];
 
   if (!sessionUser) {
@@ -456,8 +427,7 @@ function App() {
           { id: 'resumen', label: 'Resumen', count: kpiData.total },
           { id: 'interacciones', label: 'Interacciones', count: filteredData.interacciones.length },
           { id: 'clientes', label: 'Clientes', count: filteredData.clientes.length },
-          { id: 'vendedores', label: 'Vendedores', count: vendedores.length },
-          { id: 'mapa', label: 'Mapa', count: null }
+          { id: 'vendedores', label: 'Vendedores', count: vendedores.length }
         ].map(tab => (
           <button
             key={tab.id}
@@ -891,30 +861,6 @@ function App() {
                    </table>
                  </div>
               </div>
-           </div>
-        )}
-        
-        {activeTab === 'mapa' && (
-           <div className="h-[650px] space-y-4">
-             <div className="flex justify-between items-center">
-               <h2 className="text-lg font-semibold">Distribución Geográfica</h2>
-               <div className="flex gap-2 bg-card p-1 rounded-lg border border-brd">
-                 {(['clientes', 'interacciones', 'compras'] as const).map(m => (
-                   <button
-                     key={m}
-                     onClick={() => setMapMetric(m)}
-                     className={`px-3 py-1 text-xs uppercase font-bold rounded transition-colors ${mapMetric === m ? 'bg-bg2 text-t1 shadow-sm' : 'text-t3 hover:text-t2'}`}
-                   >
-                     {m}
-                   </button>
-                 ))}
-               </div>
-             </div>
-             <ArgentinaMap 
-                data={interacciones} 
-                metric={mapMetric} 
-                provincesData={mapData}
-             />
            </div>
         )}
 
