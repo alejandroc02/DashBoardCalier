@@ -3,7 +3,7 @@ import { supabase } from './services/supabase';
 import Login from './components/Login';
 import { KPICard, Badge, ChartCard } from './components/Components';
 import Aurora from './components/react-bits/Aurora';
-import { LogOut, RotateCcw, Search, AlertTriangle, Clock, RefreshCw } from 'lucide-react';
+import { LogOut, RotateCcw, Search, AlertTriangle, Clock, RefreshCw, BookOpen, ChevronRight, Lightbulb, Info } from 'lucide-react';
 import { Interaccion, Seguimiento, Cliente, Vendedor, Filters } from './types';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
@@ -21,7 +21,7 @@ function App() {
   const [vendedores, setVendedores] = useState<Vendedor[]>([]);
 
   // UI State
-  const [activeTab, setActiveTab] = useState<'resumen' | 'interacciones' | 'clientes' | 'vendedores'>('resumen');
+  const [activeTab, setActiveTab] = useState<'resumen' | 'interacciones' | 'clientes' | 'vendedores' | 'manual'>('resumen');
   const [filters, setFilters] = useState<Filters>({
     dateFrom: new Date(new Date().setDate(new Date().getDate() - 90)).toISOString().split('T')[0],
     dateTo: new Date().toISOString().split('T')[0],
@@ -427,7 +427,8 @@ function App() {
           { id: 'resumen', label: 'Resumen', count: kpiData.total },
           { id: 'interacciones', label: 'Interacciones', count: filteredData.interacciones.length },
           { id: 'clientes', label: 'Clientes', count: filteredData.clientes.length },
-          { id: 'vendedores', label: 'Vendedores', count: vendedores.length }
+          { id: 'vendedores', label: 'Vendedores', count: vendedores.length },
+          { id: 'manual', label: 'Manual', count: null }
         ].map(tab => (
           <button
             key={tab.id}
@@ -437,6 +438,7 @@ function App() {
               ${activeTab === tab.id ? 'text-teal' : 'text-t3 hover:text-t1'}
             `}
           >
+            {tab.id === 'manual' && <BookOpen size={14} className="inline mr-1.5 -mt-0.5" />}
             {tab.label}
             {tab.count !== null && <span className="ml-2 text-[10px] opacity-70">({tab.count})</span>}
             {activeTab === tab.id && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-teal"></div>}
@@ -862,6 +864,325 @@ function App() {
                  </div>
               </div>
            </div>
+        )}
+
+        {activeTab === 'manual' && (
+          <div className="space-y-6 max-w-4xl mx-auto">
+            {/* Manual Header */}
+            <div className="bg-card border border-brd rounded-xl p-8 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-teal-d flex items-center justify-center">
+                <BookOpen size={32} className="text-teal" />
+              </div>
+              <h2 className="text-2xl font-bold text-t1 mb-1">Manual de Usuario</h2>
+              <p className="text-base text-teal font-medium mb-1">Tablero de Control — Bot WhatsApp</p>
+              <p className="text-sm text-t3">Calier Argentina</p>
+              <p className="text-xs text-t3 mt-3">Guía práctica para el uso diario del dashboard &middot; Versión 1.0 — Marzo 2026</p>
+            </div>
+
+            {/* Qué es este tablero */}
+            <div className="bg-card border border-brd rounded-xl p-6">
+              <h3 className="text-lg font-bold text-t1 mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-teal rounded-full"></span>
+                ¿Qué es este tablero?
+              </h3>
+              <p className="text-sm text-t2 leading-relaxed">
+                Es una herramienta web que te permite ver todo lo que pasa con el Bot de WhatsApp de Calier Argentina: cuántas conversaciones hay, qué piden los clientes, cómo responden los vendedores y dónde hay oportunidades o problemas.
+              </p>
+            </div>
+
+            {/* Cómo entrar */}
+            <div className="bg-card border border-brd rounded-xl p-6">
+              <h3 className="text-lg font-bold text-t1 mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-teal rounded-full"></span>
+                Cómo entrar
+              </h3>
+              <ul className="space-y-2 text-sm text-t2 ml-1">
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-teal mt-0.5 shrink-0" /> Abrí el link del tablero en tu navegador (Chrome, Safari, etc.)</li>
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-teal mt-0.5 shrink-0" /> Escribí tu usuario y contraseña</li>
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-teal mt-0.5 shrink-0" /> Hacé clic en <span className="font-semibold text-t1">Iniciar Sesión</span></li>
+              </ul>
+              <div className="mt-4 p-3 bg-teal-d border border-teal/20 rounded-lg text-xs text-teal flex items-start gap-2">
+                <Info size={14} className="mt-0.5 shrink-0" />
+                Si es tu primera vez, podés registrarte desde la misma pantalla.
+              </div>
+              <p className="mt-3 text-xs text-t3 italic">Para cerrar sesión, usá el icono de salida (flecha) arriba a la derecha.</p>
+            </div>
+
+            {/* Barra superior */}
+            <div className="bg-card border border-brd rounded-xl p-6">
+              <h3 className="text-lg font-bold text-t1 mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-teal rounded-full"></span>
+                La barra superior (común a todo el tablero)
+              </h3>
+              <p className="text-sm text-t2 mb-4">Arriba de todo vas a ver controles que afectan todas las pestañas:</p>
+              <div className="space-y-3">
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-teal">Desde / Hasta:</span>
+                  <p className="text-sm text-t2 mt-1">Elegís el rango de fechas que querés analizar. Por defecto muestra los últimos 90 días.</p>
+                </div>
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-teal">Clasificación:</span>
+                  <p className="text-sm text-t2 mt-1">Filtrá por tipo de conversación:</p>
+                  <div className="mt-2 ml-4 space-y-1 text-xs text-t2">
+                    <p><span className="inline-block w-2 h-2 rounded-full bg-teal mr-2"></span><span className="font-medium text-t1">Compra</span> = el cliente quiere comprar o pedir algo</p>
+                    <p><span className="inline-block w-2 h-2 rounded-full bg-blue mr-2"></span><span className="font-medium text-t1">Info</span> = el cliente consulta precios, disponibilidad, etc.</p>
+                    <p><span className="inline-block w-2 h-2 rounded-full bg-rose mr-2"></span><span className="font-medium text-t1">Baja</span> = no hay intención de compra, rechazo o no aplica</p>
+                    <p><span className="font-medium text-t1">Todas</span> = muestra todo</p>
+                  </div>
+                </div>
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-teal">Vendedor:</span>
+                  <p className="text-sm text-t2 mt-1">Podés elegir ver solo los datos de un vendedor en particular, o dejar "Todos".</p>
+                </div>
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-teal">Botón Limpiar:</span>
+                  <p className="text-sm text-t2 mt-1">Vuelve todo a los valores originales (últimos 90 días, sin filtros).</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Pestaña RESUMEN */}
+            <div className="bg-card border border-brd rounded-xl p-6">
+              <h3 className="text-lg font-bold text-t1 mb-1 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-teal rounded-full"></span>
+                Pestaña 1: RESUMEN
+              </h3>
+              <p className="text-sm text-t2 mb-4">Es la vista principal. Te da un pantallazo rápido de cómo va todo.</p>
+
+              <h4 className="text-sm font-bold text-t1 mb-3">Los 6 cuadros de arriba</h4>
+              <div className="overflow-x-auto mb-6">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="bg-teal text-white text-xs uppercase tracking-wider">
+                      <th className="px-4 py-2.5 rounded-tl-lg font-semibold">Cuadro</th>
+                      <th className="px-4 py-2.5 rounded-tr-lg font-semibold">Qué significa</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-brd text-t2">
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-teal">Total Interacciones</td><td className="px-4 py-2.5">Cuántas conversaciones hubo en el período. Abajo dice cuántos clientes distintos participaron.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-teal">Tasa Respuesta</td><td className="px-4 py-2.5">El porcentaje de casos que fueron respondidos. Si dice 93%, significa que de cada 100 consultas, 93 se contestaron.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-teal">Leads Compra</td><td className="px-4 py-2.5">Cuántas conversaciones fueron pedidos o intenciones de compra concretas.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-teal">Leads Info</td><td className="px-4 py-2.5">Cuántas fueron consultas informativas (precios, catálogo, disponibilidad).</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-teal">Leads Baja</td><td className="px-4 py-2.5">Cuántas no tenían intención real (rechazo, no corresponde).</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-teal">Derivadas</td><td className="px-4 py-2.5">Cuántas conversaciones se pasaron a un vendedor humano porque el bot no podía resolverlas solo.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4 className="text-sm font-bold text-t1 mb-3">Los 3 gráficos</h4>
+              <div className="space-y-3 mb-6">
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-teal">Interacciones por Día:</span>
+                  <p className="text-sm text-t2 mt-1">Una línea que muestra cuántas conversaciones hubo cada día. Sirve para ver si hubo picos (por ejemplo después de una campaña) o días flojos.</p>
+                </div>
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-teal">Clasificación de Leads:</span>
+                  <p className="text-sm text-t2 mt-1">Un gráfico circular (dona) que muestra la proporción entre Compra, Info y Baja. De un vistazo ves qué tipo de consultas predominan.</p>
+                </div>
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-teal">Tasa de Respuesta por Vendedor:</span>
+                  <p className="text-sm text-t2 mt-1">Barras horizontales que muestran los 10 mejores vendedores según su porcentaje de respuesta. Útil para ver quién responde más y quién necesita seguimiento.</p>
+                </div>
+              </div>
+
+              <h4 className="text-sm font-bold text-t1 mb-3">¿Qué mirar y cuándo?</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3 bg-teal-d border border-teal/20 rounded-lg text-center">
+                  <div className="text-xs font-bold text-teal uppercase mb-1">Todos los días (2 min)</div>
+                  <p className="text-xs text-t2">Tasa de Respuesta + Derivadas. Si bajan o suben mucho, algo está pasando.</p>
+                </div>
+                <div className="p-3 bg-blue-d border border-blue/20 rounded-lg text-center">
+                  <div className="text-xs font-bold text-blue uppercase mb-1">Cada semana (10 min)</div>
+                  <p className="text-xs text-t2">El gráfico de interacciones por día + la dona de clasificación.</p>
+                </div>
+                <div className="p-3 bg-violet-d border border-violet/20 rounded-lg text-center">
+                  <div className="text-xs font-bold text-violet uppercase mb-1">Cada mes (30 min)</div>
+                  <p className="text-xs text-t2">Comparar vendedores y pensar si hay que ajustar algo.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Pestaña INTERACCIONES */}
+            <div className="bg-card border border-brd rounded-xl p-6">
+              <h3 className="text-lg font-bold text-t1 mb-1 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-blue rounded-full"></span>
+                Pestaña 2: INTERACCIONES
+              </h3>
+              <p className="text-sm text-t2 mb-4">Acá ves el detalle de cada conversación, una por una, en una tabla.</p>
+
+              <h4 className="text-sm font-bold text-t1 mb-3">Columnas de la tabla</h4>
+              <div className="overflow-x-auto mb-6">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="bg-blue text-white text-xs uppercase tracking-wider">
+                      <th className="px-4 py-2.5 rounded-tl-lg font-semibold">Columna</th>
+                      <th className="px-4 py-2.5 rounded-tr-lg font-semibold">Qué significa</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-brd text-t2">
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-blue">ID</td><td className="px-4 py-2.5">Número único de cada caso.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-blue">Cliente</td><td className="px-4 py-2.5">Nombre de la veterinaria, distribuidora, etc.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-blue">Vendedor</td><td className="px-4 py-2.5">Quién tiene asignado ese cliente.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-blue">Clasificación</td><td className="px-4 py-2.5">COMPRA, INFO o BAJA (con colorcito).</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-blue">Estado</td><td className="px-4 py-2.5">Si fue RESPONDIDO o no.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-blue">Derivado</td><td className="px-4 py-2.5">Sí o No. "Sí" significa que se pasó a un vendedor humano.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-blue">Resumen</td><td className="px-4 py-2.5">Un extracto corto de qué se trató. Si pasás el mouse por encima, ves el texto completo.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-blue">Fecha</td><td className="px-4 py-2.5">Cuándo ocurrió.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="p-3 bg-bg rounded-lg border border-brd mb-4">
+                <span className="font-semibold text-sm text-blue">El buscador:</span>
+                <p className="text-sm text-t2 mt-1">Arriba a la derecha de la tabla. Escribí cualquier palabra y filtra al instante. Podés buscar por nombre de cliente, vendedor o palabras del resumen.</p>
+              </div>
+
+              <h4 className="text-sm font-bold text-t1 mb-2">¿Para qué la usarías?</h4>
+              <ul className="space-y-1 text-sm text-t2 ml-1">
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-blue mt-0.5 shrink-0" /> Buscar un caso puntual de un cliente.</li>
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-blue mt-0.5 shrink-0" /> Filtrar por COMPRA + Derivado = Sí para ver qué pedidos se pasaron a vendedores.</li>
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-blue mt-0.5 shrink-0" /> Filtrar por BAJA y revisar si realmente no había oportunidad.</li>
+              </ul>
+            </div>
+
+            {/* Pestaña CLIENTES */}
+            <div className="bg-card border border-brd rounded-xl p-6">
+              <h3 className="text-lg font-bold text-t1 mb-1 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-amber rounded-full"></span>
+                Pestaña 3: CLIENTES
+              </h3>
+              <p className="text-sm text-t2 mb-4">Te muestra la base de clientes y su actividad.</p>
+
+              <h4 className="text-sm font-bold text-t1 mb-3">Los 4 cuadros de arriba</h4>
+              <div className="overflow-x-auto mb-6">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="bg-amber text-white text-xs uppercase tracking-wider">
+                      <th className="px-4 py-2.5 rounded-tl-lg font-semibold">Cuadro</th>
+                      <th className="px-4 py-2.5 rounded-tr-lg font-semibold">Qué significa</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-brd text-t2">
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-amber">Total Clientes</td><td className="px-4 py-2.5">Cuántos clientes distintos hay.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-amber">Total Interacciones</td><td className="px-4 py-2.5">Cuántas conversaciones hay en el período filtrado.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-amber">Sin Interacción</td><td className="px-4 py-2.5">Cuántos clientes NO tuvieron ninguna conversación. Estos son clientes "dormidos" que tal vez necesitan un contacto.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-amber">Provincias</td><td className="px-4 py-2.5">En cuántas provincias hay clientes (cobertura geográfica).</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4 className="text-sm font-bold text-t1 mb-3">Los 2 gráficos</h4>
+              <div className="space-y-3 mb-6">
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-amber">Clientes por Sector (dona):</span>
+                  <p className="text-sm text-t2 mt-1">Muestra cómo se reparten los clientes por rubro (Veterinaria, Farmacia Vet, Distribuidora, Cooperativa, etc.). Sirve para saber a qué tipo de cliente llega más el bot.</p>
+                </div>
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-amber">Clientes por Provincia (barras):</span>
+                  <p className="text-sm text-t2 mt-1">Las 10 provincias con más clientes. Útil para decisiones de cobertura comercial.</p>
+                </div>
+              </div>
+
+              <div className="p-3 bg-bg rounded-lg border border-brd mb-4">
+                <span className="font-semibold text-sm text-amber">Directorio de Clientes:</span>
+                <p className="text-sm text-t2 mt-1">Lista completa con Código, Nombre, Provincia, Localidad, Sector, Vendedor asignado, Email y cuántas interacciones tuvo cada cliente. También tiene buscador.</p>
+              </div>
+
+              <h4 className="text-sm font-bold text-t1 mb-2">¿Para qué la usarías?</h4>
+              <ul className="space-y-1 text-sm text-t2 ml-1">
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-amber mt-0.5 shrink-0" /> Ver qué clientes no tienen actividad y planificar contacto.</li>
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-amber mt-0.5 shrink-0" /> Detectar provincias o sectores con más demanda.</li>
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-amber mt-0.5 shrink-0" /> Encontrar clientes sin vendedor asignado.</li>
+              </ul>
+            </div>
+
+            {/* Pestaña VENDEDORES */}
+            <div className="bg-card border border-brd rounded-xl p-6">
+              <h3 className="text-lg font-bold text-t1 mb-1 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-violet rounded-full"></span>
+                Pestaña 4: VENDEDORES
+              </h3>
+              <p className="text-sm text-t2 mb-4">Acá se mide el rendimiento del equipo comercial.</p>
+
+              <h4 className="text-sm font-bold text-t1 mb-3">Los 4 cuadros de arriba</h4>
+              <div className="overflow-x-auto mb-6">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="bg-violet text-white text-xs uppercase tracking-wider">
+                      <th className="px-4 py-2.5 rounded-tl-lg font-semibold">Cuadro</th>
+                      <th className="px-4 py-2.5 rounded-tr-lg font-semibold">Qué significa</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-brd text-t2">
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-violet">Total Vendedores</td><td className="px-4 py-2.5">Cuántos hay en total y cuántos están activos.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-violet">Interacciones</td><td className="px-4 py-2.5">Cuántas conversaciones tiene asignadas el equipo.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-violet">Compras</td><td className="px-4 py-2.5">Cuántos casos fueron clasificados como compra.</td></tr>
+                    <tr className="hover:bg-bg transition-colors"><td className="px-4 py-2.5 font-semibold text-violet">Conversión Prom.</td><td className="px-4 py-2.5">El porcentaje promedio de conversión del equipo (compras sobre total). Ejemplo: 41% significa que de cada 100 interacciones, 41 terminaron en compra.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4 className="text-sm font-bold text-t1 mb-3">Los 2 paneles del medio</h4>
+              <div className="space-y-3 mb-6">
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-violet">Efectividad en Derivaciones (dona):</span>
+                  <p className="text-sm text-t2 mt-1">Muestra cuántas derivaciones (casos pasados a vendedores) ya fueron contactadas vs cuántas siguen pendientes. Si hay muchas pendientes, hay que actuar.</p>
+                </div>
+                <div className="p-3 bg-bg rounded-lg border border-brd">
+                  <span className="font-semibold text-sm text-violet">Top Derivaciones con Mora (lista):</span>
+                  <p className="text-sm text-t2 mt-1">Los casos con más días sin resolución. Cada tarjeta muestra el vendedor, el cliente y cuántos días lleva pendiente.</p>
+                </div>
+              </div>
+
+              <div className="p-3 bg-amber-d border border-amber/20 rounded-lg text-sm mb-6 flex items-start gap-2">
+                <Lightbulb size={16} className="text-amber mt-0.5 shrink-0" />
+                <span className="text-t2"><span className="font-bold text-amber">Consejo:</span> Esta es una lista de alertas para actuar ya. Si ves algo con muchos días, hay que hacer seguimiento urgente.</span>
+              </div>
+
+              <div className="p-3 bg-bg rounded-lg border border-brd mb-4">
+                <span className="font-semibold text-sm text-violet">Tabla "Equipo de Ventas":</span>
+                <p className="text-sm text-t2 mt-1">Muestra cada vendedor con su Código, Nombre, Laboratorio, si está Activo, cuántos Clientes tiene, cuántas Interacciones manejó, cuántas Compras logró, su porcentaje de Conversión y cuántas Derivaciones tiene.</p>
+              </div>
+
+              <h4 className="text-sm font-bold text-t1 mb-2">¿Para qué la usarías?</h4>
+              <ul className="space-y-1 text-sm text-t2 ml-1">
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-violet mt-0.5 shrink-0" /><span><span className="font-semibold text-t1">Todos los días:</span> Mirar las derivaciones con mora y actuar sobre las más viejas.</span></li>
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-violet mt-0.5 shrink-0" /><span><span className="font-semibold text-t1">Cada semana:</span> Comparar interacciones por vendedor para ver si la carga está balanceada.</span></li>
+                <li className="flex items-start gap-2"><ChevronRight size={16} className="text-violet mt-0.5 shrink-0" /><span><span className="font-semibold text-t1">Cada mes:</span> Revisar % de conversión para detectar quién necesita capacitación o apoyo.</span></li>
+              </ul>
+            </div>
+
+            {/* Consejos generales */}
+            <div className="bg-card border border-brd rounded-xl p-6">
+              <h3 className="text-lg font-bold text-t1 mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-amber rounded-full"></span>
+                Consejos generales
+              </h3>
+              <p className="text-sm text-t2 mb-4">Estas son recomendaciones prácticas para sacarle el máximo provecho al tablero:</p>
+              <div className="space-y-3">
+                <div className="p-3 bg-amber-d border border-amber/20 rounded-lg text-sm flex items-start gap-2">
+                  <Lightbulb size={16} className="text-amber mt-0.5 shrink-0" />
+                  <span className="text-t2"><span className="font-bold text-amber">Si las Derivadas suben mucho:</span> El bot no está resolviendo lo suficiente. Revisar las respuestas automáticas.</span>
+                </div>
+                <div className="p-3 bg-amber-d border border-amber/20 rounded-lg text-sm flex items-start gap-2">
+                  <Lightbulb size={16} className="text-amber mt-0.5 shrink-0" />
+                  <span className="text-t2"><span className="font-bold text-amber">Si la Tasa de Respuesta baja:</span> Los vendedores no están respondiendo a tiempo. Mirar el panel de mora.</span>
+                </div>
+                <div className="p-3 bg-amber-d border border-amber/20 rounded-lg text-sm flex items-start gap-2">
+                  <Lightbulb size={16} className="text-amber mt-0.5 shrink-0" />
+                  <span className="text-t2"><span className="font-bold text-amber">Si hay mucho INFO:</span> Es oportunidad para crear respuestas automáticas de precios, fichas técnicas, etc.</span>
+                </div>
+                <div className="p-3 bg-amber-d border border-amber/20 rounded-lg text-sm flex items-start gap-2">
+                  <Lightbulb size={16} className="text-amber mt-0.5 shrink-0" />
+                  <span className="text-t2"><span className="font-bold text-amber">Si hay muchos clientes sin interacción:</span> Armar una campaña de reactivación.</span>
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-teal-d border border-teal/20 rounded-lg text-xs text-teal flex items-start gap-2">
+                <Info size={14} className="mt-0.5 shrink-0" />
+                El botón de actualizar (flechas circulares arriba a la derecha) recarga los datos frescos de la base.
+              </div>
+            </div>
+          </div>
         )}
 
       </main>
